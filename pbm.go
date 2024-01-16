@@ -1,4 +1,4 @@
-package netpbm
+package main
 
 import (
 	"bufio"
@@ -191,6 +191,7 @@ func (pbm *PBM) SetMagicNumber(magicNumber string) {
 	pbm.magicNumber = magicNumber
 }
 
+/*
 func main() {
 	image, err := ReadPBM("duck.pbm")
 	if err != nil {
@@ -264,3 +265,4 @@ func main() {
 	fmt.Println("L'image modifiée a été enregistrée avec succès.")
 
 }
+*/
