@@ -3,7 +3,9 @@ package Netpbm
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
+	"strings"
 )
 
 type PBM struct {
@@ -19,58 +21,80 @@ func ReadPBM(filename string) (*PBM, error) {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	reader := bufio.NewReader(file)
 
-	var magicNumber string
-	var width, height int
-	var data [][]bool
-
-	// Read the magic number
-	if scanner.Scan() {
-		magicNumber = scanner.Text()
-		fmt.Println("Magic Number:", magicNumber)
-	} else {
-		return nil, fmt.Errorf("error reading magic number: %w", err)
+	// Read magic number
+	magicNumber, err := reader.ReadString('\n')
+	if err != nil {
+		return nil, fmt.Errorf("error reading magic number: %v", err)
+	}
+	magicNumber = strings.TrimSpace(magicNumber)
+	if magicNumber != "P1" && magicNumber != "P4" {
+		return nil, fmt.Errorf("invalid magic number: %s", magicNumber)
 	}
 
 	// Read dimensions
-	if scanner.Scan() {
-		dimensionLine := scanner.Text()
-		fmt.Println("Dimensions Line:", dimensionLine)
-
-		_, err := fmt.Sscanf(dimensionLine, "%d %d", &width, &height)
-		if err != nil {
-			return nil, fmt.Errorf("error reading dimensions: %w", err)
-		}
-
-		fmt.Println("Dimensions:", width, height)
-	} else {
-		return nil, fmt.Errorf("error reading dimensions: no data found")
+	dimensions, err := reader.ReadString('\n')
+	if err != nil {
+		return nil, fmt.Errorf("error reading dimensions: %v", err)
+	}
+	var width, height int
+	_, err = fmt.Sscanf(strings.TrimSpace(dimensions), "%d %d", &width, &height)
+	if err != nil {
+		return nil, fmt.Errorf("invalid dimensions: %v", err)
 	}
 
-	// Read binary data based on the magic number (only P1 supported)
-	for scanner.Scan() {
-		line := scanner.Text()
+	data := make([][]bool, height)
 
-		if magicNumber == "P1" { // PBM Plain (ASCII)
-			var row []bool
-			for _, char := range line {
-				if char == '1' {
-					row = append(row, true)
-				} else if char == '0' {
-					row = append(row, false)
-				}
+	for i := range data {
+		data[i] = make([]bool, width)
+	}
+
+	if magicNumber == "P1" {
+		// Read P1 format (ASCII)
+		for y := 0; y < height; y++ {
+			line, err := reader.ReadString('\n')
+			if err != nil {
+				return nil, fmt.Errorf("error reading data at row %d: %v", y, err)
 			}
-			data = append(data, row)
+			fields := strings.Fields(line)
+			for x, field := range fields {
+				if x >= width {
+					return nil, fmt.Errorf("index out of range at row %d", y)
+				}
+				data[y][x] = field == "1"
+			}
+		}
+	} else if magicNumber == "P4" {
+		// Read P4 format (binary)
+		expectedBytesPerRow := (width + 7) / 8
+		for y := 0; y < height; y++ {
+			row := make([]byte, expectedBytesPerRow)
+			n, err := reader.Read(row)
+			if err != nil {
+				if err == io.EOF {
+					return nil, fmt.Errorf("unexpected end of file at row %d", y)
+				}
+				return nil, fmt.Errorf("error reading pixel data at row %d: %v", y, err)
+			}
+			if n < expectedBytesPerRow {
+				return nil, fmt.Errorf("unexpected end of file at row %d, expected %d bytes, got %d", y, expectedBytesPerRow, n)
+			}
+
+			for x := 0; x < width; x++ {
+				byteIndex := x / 8
+				bitIndex := 7 - (x % 8)
+
+				// Convert ASCII to decimal and extract the bit
+				decimalValue := int(row[byteIndex])
+				bitValue := (decimalValue >> bitIndex) & 1
+
+				data[y][x] = bitValue != 0
+			}
 		}
 	}
 
-	return &PBM{
-		data:        data,
-		width:       width,
-		height:      height,
-		magicNumber: magicNumber,
-	}, nil
+	return &PBM{data, width, height, magicNumber}, nil
 }
 
 // Size returns the width and height of the image.
@@ -114,23 +138,42 @@ func (pbm *PBM) Save(filename string) error {
 	}
 
 	// Écrire les données binaires de l'image dans le fichier
-	for _, row := range pbm.data {
-		for _, value := range row {
-			if value {
-				_, err := writer.WriteString("1 ")
-				if err != nil {
-					return fmt.Errorf("error writing data: %w", err)
-				}
-			} else {
-				_, err := writer.WriteString("0 ")
-				if err != nil {
-					return fmt.Errorf("error writing data: %w", err)
+	if pbm.magicNumber == "P1" {
+		// Si le format est P1 (ASCII), écrire les données comme des caractères '0' et '1'
+		for _, row := range pbm.data {
+			for _, value := range row {
+				if value {
+					_, err := writer.WriteString("1 ")
+					if err != nil {
+						return fmt.Errorf("error writing data: %w", err)
+					}
+				} else {
+					_, err := writer.WriteString("0 ")
+					if err != nil {
+						return fmt.Errorf("error writing data: %w", err)
+					}
 				}
 			}
+			_, err := writer.WriteString("\n")
+			if err != nil {
+				return fmt.Errorf("error writing data: %w", err)
+			}
 		}
-		_, err := writer.WriteString("\n")
-		if err != nil {
-			return fmt.Errorf("error writing data: %w", err)
+	} else if pbm.magicNumber == "P4" {
+		// Si le format est P4 (binaire), écrire les données sous forme binaire
+		for _, row := range pbm.data {
+			bytes := make([]byte, (pbm.width+7)/8)
+			for x, value := range row {
+				byteIndex := x / 8
+				bitIndex := 7 - (x % 8)
+				if value {
+					bytes[byteIndex] |= (1 << uint(bitIndex))
+				}
+			}
+			_, err := writer.Write(bytes)
+			if err != nil {
+				return fmt.Errorf("error writing binary data: %w", err)
+			}
 		}
 	}
 
