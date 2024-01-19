@@ -1,6 +1,5 @@
-package main
+package Netpbm
 
-/*
 import (
 	"bufio"
 	"fmt"

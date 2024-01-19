@@ -1,4 +1,4 @@
-package main
+package Netpbm
 
 import (
 	"bufio"
@@ -277,7 +277,9 @@ func main() {
 	fmt.Println("Width:", width)
 	fmt.Println("Height:", height)
 	fmt.Println(pgm.data)
-	/*
+}
+
+/*
 		// Exemple d'utilisation de la fonction Set pour définir la valeur du pixel à la position (2, 3)
 		x, y := 2, 3
 		newValue := uint8(100)
@@ -352,7 +354,7 @@ func main() {
 		}
 
 		fmt.Println("Image pivotée de 90° dans le sens des aiguilles d'une montre et enregistrée avec succès.")
-	*/
+
 	// Exemple d'utilisation de la fonction ToPBM pour convertir l'image PGM en PBM
 	pbm := pgm.ToPBM()
 
@@ -366,3 +368,4 @@ func main() {
 	fmt.Println("Image PGM convertie en PBM et enregistrée avec succès.")
 
 }
+*/
