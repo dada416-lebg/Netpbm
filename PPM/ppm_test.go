@@ -278,9 +278,9 @@ func TestReadPPM(t *testing.T) {
 	if ppm.max != imagePPMMax {
 		t.Error("Max value not read correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMData[i] {
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
@@ -301,9 +301,9 @@ func TestReadPPM(t *testing.T) {
 	if ppm.max != imagePPMMax {
 		t.Error("Max value not read correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMData[i] {
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
@@ -326,9 +326,9 @@ func TestPPMAt(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.At(x, y) != imagePPMData[i] {
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
@@ -373,9 +373,9 @@ func TestPPMSave(t *testing.T) {
 	if ppm.max != imagePPMMax {
 		t.Error("Max value not read correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMData[i] {
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
@@ -405,9 +405,9 @@ func TestPPMSave(t *testing.T) {
 	if ppm.max != imagePPMMax {
 		t.Error("Max value not read correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMData[i] {
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
@@ -429,9 +429,9 @@ func TestPPMInvert(t *testing.T) {
 		t.Error(err)
 	}
 	ppm.Invert()
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMInvert[i] {
 			t.Errorf("Pixel at (%d, %d) not inverted correctly", x, y)
 		}
@@ -445,9 +445,9 @@ func TestPPMFlip(t *testing.T) {
 		t.Error(err)
 	}
 	ppm.Flip()
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMFlip[i] {
 			t.Errorf("Pixel at (%d, %d) not flipped correctly", x, y)
 		}
@@ -460,9 +460,9 @@ func TestPPMFlop(t *testing.T) {
 		t.Error(err)
 	}
 	ppm.Flop()
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMFlop[i] {
 			t.Errorf("Pixel at (%d, %d) not flopped correctly", x, y)
 		}
@@ -494,9 +494,9 @@ func TestPPMSetMaxValue(t *testing.T) {
 	if ppm.max != 128 {
 		t.Error("Max value not set correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x].R != uint8(float64(imagePPMData[i].R)*float64(ppm.max)/float64(oldMax)) {
 			t.Errorf("Red value at (%d, %d) not converted correctly wanted %d got %d", x, y, uint8(float64(imagePPMData[i].R)*float64(ppm.max)/float64(oldMax)), ppm.data[y][x].R)
 		}
@@ -521,9 +521,9 @@ func TestPPMRotate90CW(t *testing.T) {
 	if ppm.height != imagePPMWidth {
 		t.Error("Height not rotated correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMRotate90[i] {
 			t.Errorf("Pixel at (%d, %d) not rotated correctly wanted %v got %v", x, y, imagePPMRotate90[i], ppm.data[x][y])
 		}
@@ -548,9 +548,9 @@ func TestPPMToPGM(t *testing.T) {
 	if pgm.max != imagePPMMax {
 		t.Error("Max value not set correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if pgm.data[y][x] != uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3) {
 			t.Errorf("Pixel at (%d, %d) not converted correctly wanted %d got %d", x, y, uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3), pgm.data[y][x])
 		}
@@ -572,14 +572,15 @@ func TestPPMToPBM(t *testing.T) {
 	if pbm.height != imagePPMHeight {
 		t.Error("Height not set correctly")
 	}
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
-		if pbm.data[y][x] != (uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3) < ppm.max/2) {
-			t.Errorf("Pixel at (%d, %d) not converted correctly wanted %t got %t", x, y, uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3) > ppm.max/2, pbm.data[y][x])
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
+		if pbm.data[y][x] != (uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3) < uint8(ppm.max/2)) {
+			t.Errorf("Pixel at (%d, %d) not converted correctly wanted %t got %t", x, y, uint8((int(imagePPMData[i].R)+int(imagePPMData[i].G)+int(imagePPMData[i].B))/3) > uint8(ppm.max/2), pbm.data[y][x])
 		}
+
 	}
-}
+
 
 func TestPPMDrawLine(t *testing.T) {
 	ppm, err := ReadPPM("./testImages/ppm/blank.ppm")
@@ -589,10 +590,11 @@ func TestPPMDrawLine(t *testing.T) {
 	ppm.DrawLine(Point{X: 3, Y: 5}, Point{X: 11, Y: 5}, Pixel{R: 255, G: 0, B: 0})
 	ppm.DrawLine(Point{X: 0, Y: 0}, Point{X: 20, Y: 20}, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawLine[i] {
+
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawLine[i], ppm.data[y][x])
 		}
 	}
@@ -606,9 +608,9 @@ func TestPPMDrawRectangle(t *testing.T) {
 	ppm.DrawRectangle(Point{X: 3, Y: 5}, 7, 5, Pixel{R: 255, G: 0, B: 0})
 	ppm.DrawRectangle(Point{X: 0, Y: 0}, 20, 20, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawRectangle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawRectangle[i], ppm.data[y][x])
 		}
@@ -623,9 +625,9 @@ func TestPPMDrawFilledRectangle(t *testing.T) {
 	ppm.DrawFilledRectangle(Point{X: 0, Y: 0}, 20, 20, Pixel{R: 0, G: 255, B: 0})
 	ppm.DrawFilledRectangle(Point{X: 3, Y: 5}, 7, 5, Pixel{R: 255, G: 0, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawFilledRectangle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawFilledRectangle[i], ppm.data[y][x])
 		}
@@ -639,9 +641,9 @@ func TestPPMDrawCircle(t *testing.T) {
 	}
 	ppm.DrawCircle(Point{X: 7, Y: 7}, 5, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawCircle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawCircle[i], ppm.data[y][x])
 		}
@@ -655,9 +657,9 @@ func TestPPMDrawFilledCircle(t *testing.T) {
 	}
 	ppm.DrawFilledCircle(Point{X: 7, Y: 7}, 5, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawFilledCircle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawFilledCircle[i], ppm.data[y][x])
 		}
@@ -671,9 +673,9 @@ func TestPPMDrawTriangle(t *testing.T) {
 	}
 	ppm.DrawTriangle(Point{X: 1, Y: 1}, Point{X: 8, Y: 1}, Point{X: 8, Y: 8}, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawTriangle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawTriangle[i], ppm.data[y][x])
 		}
@@ -687,9 +689,9 @@ func TestPPMDrawFilledTriangle(t *testing.T) {
 	}
 	ppm.DrawFilledTriangle(Point{X: 1, Y: 1}, Point{X: 8, Y: 1}, Point{X: 8, Y: 8}, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawFilledTriangle[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawFilledTriangle[i], ppm.data[y][x])
 		}
@@ -708,9 +710,9 @@ func TestPPMDrawPolygon(t *testing.T) {
 		{X: 10, Y: 1},
 	}, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawPolygon[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawPolygon[i], ppm.data[y][x])
 		}
@@ -729,9 +731,9 @@ func TestPPMDrawFilledPolygon(t *testing.T) {
 		{X: 10, Y: 1},
 	}, Pixel{R: 0, G: 255, B: 0})
 
-	for i := 0; i < imageWidth*imageHeight; i++ {
-		x := i % imageWidth
-		y := i / imageWidth
+	for i := 0; i < imagePPMWidth*imagePPMHeight; i++ {
+		x := i % imagePPMWidth
+		y := i / imagePPMWidth
 		if ppm.data[y][x] != imagePPMDrawFilledPolygon[i] {
 			t.Errorf("Pixel at (%d, %d) not drawn correctly wanted %v got %v", x, y, imagePPMDrawFilledPolygon[i], ppm.data[y][x])
 		}

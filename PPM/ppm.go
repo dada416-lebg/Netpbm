@@ -237,10 +237,11 @@ func (ppm *PPM) Rotate90CW() {
 
 // PGM structure for grayscale images
 type PGM struct {
-	data   [][]uint8
-	width  int
-	height int
-	max    int
+	data        [][]uint8
+	width       int
+	height      int
+	max         int
+	magicNumber string
 }
 
 // ToPGM converts the PPM image to PGM.
@@ -272,48 +273,10 @@ func (ppm *PPM) ToPGM() *PGM {
 
 // Structure PBM pour les images binaires
 type PBM struct {
-	data   [][]bool
-	width  int
-	height int
-}
-
-// ToPBM convertit l'image PPM en PBM.
-func (ppm *PPM) ToPBM(seuil uint8) *PBM {
-	// Initialisez une nouvelle structure PBM
-	pbm := &PBM{
-		data:   make([][]bool, ppm.height),
-		width:  ppm.width,
-		height: ppm.height,
-	}
-
-	// Initialisez le tableau de données pour PBM
-	for i := 0; i < ppm.height; i++ {
-		pbm.data[i] = make([]bool, ppm.width)
-	}
-
-	// Convertissez les valeurs de niveaux de gris en binaire en fonction du seuil
-	for i := 0; i < ppm.height; i++ {
-		for j := 0; j < ppm.width; j++ {
-			pixel := ppm.data[i][j]
-			valeurGris := 0.299*float64(pixel.R) + 0.587*float64(pixel.G) + 0.114*float64(pixel.B)
-
-			// Vérifiez si la valeur de niveaux de gris est supérieure au seuil
-			if uint8(valeurGris) >= seuil {
-				pbm.data[i][j] = true
-			} else {
-				pbm.data[i][j] = false
-			}
-		}
-	}
-
-	return pbm
-}
-
-// Structure PBM pour les images binaires
-type PBM struct {
-	data   [][]bool
-	width  int
-	height int
+	data        [][]bool
+	width       int
+	height      int
+	magicNumber string
 }
 
 // ToPBM convertit l'image PPM en PBM.
