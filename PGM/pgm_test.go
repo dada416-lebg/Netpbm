@@ -308,7 +308,6 @@ func TestRotate90CWPGM(t *testing.T) {
 	}
 }
 
-/*
 func TestSetMagicNumberPGM(t *testing.T) {
 	pgm, err := ReadPGM("./testImages/pgm/testP2.pgm")
 	if err != nil {
@@ -319,6 +318,7 @@ func TestSetMagicNumberPGM(t *testing.T) {
 		t.Error("Magic number not set correctly")
 	}
 }
+
 
 func TestSetMaxValuePGM(t *testing.T) {
 	pgm, err := ReadPGM("./testImages/pgm/testP2.pgm")
@@ -358,8 +358,9 @@ func TestToPBM(t *testing.T) {
 		x := i % imagePGMWidth
 		y := i / imagePGMWidth
 		if pbm.data[y][x] != (testData[i] < pgm.max/2) {
+		if pbm.data [y][x] != (testData[i] < uint8(pgm.max)/2)
 			t.Errorf("Pixel at (%d, %d) not read correctly", x, y)
 		}
 	}
 }
-*/
+
